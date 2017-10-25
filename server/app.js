@@ -1,6 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
@@ -14,7 +13,7 @@ const users = require('./routes/users')
 // Midddleware
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(cors())
+
 //Routes
 app.use('/users', users)
 
