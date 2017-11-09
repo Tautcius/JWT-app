@@ -3,19 +3,26 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
+const jwt = require('jsonwebtoken')
+const config = require('./config')
+const User = require('./models/user')
+
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost:27017/JWT-app',{ useMongoClient: true })
+mongoose.connect(config.database, { useMongoClient: true })
 
 const app = express()
+//secret variable
+app.set('secret', config.secret)
 
-const users = require('./routes/users')
+
+const apiRoutes = require('./routes/users')
 
 // Midddleware
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 
 //Routes
-app.use('/users', users)
+app.use('/api', apiRoutes)
 
 //Catch 404 Errors and forward to error handler
 app.use((req, res, next) => {
