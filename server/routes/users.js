@@ -11,7 +11,7 @@ router.route('/')
 )
 
 router.route('/signup')
-.post(usersControler.newUser)
+.post(usersControler.signUp)
 
 router.route('/login')
 .post(usersControler.login)
@@ -19,7 +19,10 @@ router.route('/login')
 router.route('/home')
 .get(usersControler.index)
 
-router.route('/protected')
-.get(usersControler.protected)
+router.use(usersControler.verifyToken)
+router.route('/users')
+.get(usersControler.users)
+router.route('/me')
+.get(usersControler.me)
 
 module.exports = router
