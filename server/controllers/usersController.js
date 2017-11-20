@@ -58,7 +58,7 @@ module.exports = {
                 name: req.body.name
             }, (err, user) => {
                 console.log(user)
-                let isValid = bcrypt.compare(req.body.password, user.password, function(err, res) {
+                let isValid = bcrypt.compare(req.body.password, user.rspassword, function(err, res) {
                     if (err) {
                         throw err
                     }
@@ -126,6 +126,19 @@ module.exports = {
         User.findById(res.decoded.user._id, (err, user) => {
             if (err) throw err
             res.json(user)
+        })
+    },
+    updateMe:(req, res, next) => {
+        let updateUser = req.body
+        User.findByIdAndUpdate(res.decoded.user._id, updateUser, (err, updateUser) => {
+            if (err) throw err
+            res.status(200).json({ success: true})
+        })
+    },
+    deleteMe: (req, res, next) => {
+        User.findByIdAndRemove(res.decoded.user._id, (err, user) => {
+            if (err) throw err
+            res.status(200).json({message: "User has beed deleted"})
         })
     }
 }

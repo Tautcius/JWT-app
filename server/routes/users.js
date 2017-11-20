@@ -24,5 +24,7 @@ router.route('/users')
 .get(usersControler.users)
 router.route('/me')
 .get(usersControler.me)
+.put(usersControler.updateMe)
+.delete(usersControler.deleteMe)
 
 module.exports = router
