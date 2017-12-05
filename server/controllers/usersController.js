@@ -9,50 +9,48 @@ signToken = user => {
             expiresIn: 60 * 60 * 24,
         })
 }
+unprotected = {
 
+}
+
+protected = {
+    
+}
 module.exports = {
-        index: async(req, res, next) => {
-            try {
-                const users = await User.find({})
-                res.status(200).json(users)
-            } catch (err) {
-                next(err)
-            }
-        },
-        signUp: async(req, res, next) => {
-            try {
-                const {
-                    name
-                    } = req.body
-                const foundUser = await User.findOne({
-                    name
+    signUp: async(req, res, next) => {
+        try {
+            const {
+                name
+                } = req.body
+            const foundUser = await User.findOne({
+                name
+            })
+            if (foundUser) {
+                return res.status(401).json({
+                    error: 'name is in use'
                 })
-                if (foundUser) {
-                    return res.status(401).json({
-                        error: 'name is in use'
-                    })
-                }
-                //hash passowrd
-                const hash = await User.hashPassword(req.body.password)
-                console.log('hash', hash)
-                //save User
-                delete req.body.password
-                req.body.password = hash
-
-                const newUser = new User(req.body)
-                await newUser.save()
-                //generate token
-                const token = signToken(newUser)
-                //respond with token
-                res.status(200).json({
-                    token
-                })
-            } catch (err) {
-                next(err)
             }
+            //hash passowrd
+            const hash = await User.hashPassword(req.body.password)
+            console.log('hash', hash)
+            //save User
+            delete req.body.password
+            req.body.password = hash
 
-        },
-        login: (req, res, next) => {
+            const newUser = new User(req.body)
+            await newUser.save()
+            //generate token
+            const token = signToken(newUser)
+            //respond with token
+            res.status(200).json({
+                token
+            })
+        } catch (err) {
+            next(err)
+        }
+
+    },
+    login: (req, res, next) => {
             console.log(req.body)
             User.findOne({
                 name: req.body.name
@@ -128,14 +126,14 @@ module.exports = {
             res.json(user)
         })
     },
-    updateMe:(req, res, next) => {
+    update:(req, res, next) => {
         let updateUser = req.body
         User.findByIdAndUpdate(res.decoded.user._id, updateUser, (err, updateUser) => {
             if (err) throw err
             res.status(200).json({ success: true})
         })
     },
-    deleteMe: (req, res, next) => {
+    delete: (req, res, next) => {
         User.findByIdAndRemove(res.decoded.user._id, (err, user) => {
             if (err) throw err
             res.status(200).json({message: "User has beed deleted"})

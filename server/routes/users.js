@@ -9,13 +9,13 @@ router.route('/')
         res.json({ message: 'you are at /api'})
     }
 )
-
+//unprotected routes
 router.route('/signup')
 .post(usersControler.signUp)
 
 router.route('/login')
 .post(usersControler.login)
-
+//protected routes
 router.route('/home')
 .get(usersControler.index)
 
@@ -24,7 +24,7 @@ router.route('/users')
 .get(usersControler.users)
 router.route('/me')
 .get(usersControler.me)
-.put(usersControler.updateMe)
-.delete(usersControler.deleteMe)
+.put(usersControler.update)
+.delete(usersControler.delete)
 
 module.exports = router
