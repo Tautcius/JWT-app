@@ -9,15 +9,21 @@ signToken = user => {
             expiresIn: 60 * 60 * 24,
         })
 }
-unprotected = {
-
+exports.unprotected = {
+    signUp: () => {},
+    login: () => {},
+    verifyToken: () => {} 
 }
 
-protected = {
-    
+exports.protected = {
+    me: () => {},
+    update: () => {},
+    delete: () => {},
+    users: () => {}
 }
-module.exports = {
-    signUp: async(req, res, next) => {
+
+
+    exports.unprotected.signUp = async(req, res, next) => {
         try {
             const {
                 name
@@ -50,7 +56,7 @@ module.exports = {
         }
 
     },
-    login: (req, res, next) => {
+    exports.unprotected.login = (req, res, next) => {
             console.log(req.body)
             User.findOne({
                 name: req.body.name
@@ -93,13 +99,13 @@ module.exports = {
                 }
             })
     },
-    users: (req, res, next) => {
+    exports.protected.users = (req, res, next) => {
         User.find({}, (err, users) => {
             if (err) return res.status(500).send("there was a problem finding user.")
             res.json(users)
         })
     },
-    verifyToken: (req, res, next) => {
+    exports.unprotected.verifyToken = (req, res, next) => {
         let token = req.body.token || req.query.token || req.headers['x-access-token']
         console.log(token)
         if (token) {
@@ -120,23 +126,22 @@ module.exports = {
             })
         }
     },
-    me: (req, res, next) => {
+    exports.protected.me = (req, res, next) => {
         User.findById(res.decoded.user._id, (err, user) => {
             if (err) throw err
             res.json(user)
         })
     },
-    update:(req, res, next) => {
+    exports.protected.update = (req, res, next) => {
         let updateUser = req.body
         User.findByIdAndUpdate(res.decoded.user._id, updateUser, (err, updateUser) => {
             if (err) throw err
             res.status(200).json({ success: true})
         })
     },
-    delete: (req, res, next) => {
-        User.findByIdAndRemove(res.decoded.user._id, (err, user) => {
+    exports.protected.delete = (req, res, next) => {
+        User.Remove(res.decoded.user._id, (err, user) => {
             if (err) throw err
             res.status(200).json({message: "User has beed deleted"})
         })
     }
-}

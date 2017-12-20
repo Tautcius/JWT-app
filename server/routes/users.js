@@ -11,20 +11,20 @@ router.route('/')
 )
 //unprotected routes
 router.route('/signup')
-.post(usersControler.signUp)
+.post(usersControler.unprotected.signUp)
 
 router.route('/login')
-.post(usersControler.login)
+.post(usersControler.unprotected.login)
 //protected routes
-router.route('/home')
-.get(usersControler.index)
+//router.route('/home')
+//.get(usersControler.protected.index)
 
-router.use(usersControler.verifyToken)
+router.use(usersControler.unprotected.verifyToken)
 router.route('/users')
-.get(usersControler.users)
+.get(usersControler.protected.users)
 router.route('/me')
-.get(usersControler.me)
-.put(usersControler.update)
-.delete(usersControler.delete)
+.get(usersControler.protected.me)
+.put(usersControler.protected.update)
+.delete(usersControler.protected.delete)
 
 module.exports = router
