@@ -5,7 +5,7 @@
       <v-toolbar-title>JWT APP</v-toolbar-title>
       <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn flat to="/">Home</v-btn>
+      <v-btn flat to="/" exact>Home</v-btn>
       <v-btn flat to="/signup">Sign Up</v-btn>
       <v-btn flat to="/login">Login</v-btn>
     </v-toolbar-items>
