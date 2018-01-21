@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 
@@ -21,9 +22,13 @@ const apiRoutes = require('./routes/users')
 // Midddleware
 app.use(morgan('dev'))
 app.use(bodyParser.json())
+app.use(cors())
 
 //Routes
 app.use('/api', apiRoutes)
+
+//304 error
+app.disable('etag');
 
 //Catch 404 Errors and forward to error handler
 app.use((req, res, next) => {
