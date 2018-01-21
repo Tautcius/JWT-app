@@ -1,11 +1,11 @@
 <template>
   <div class="hello">
-    <h2>{{ results }}</h2>
+    <h2>{{ results.message }}</h2>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import UserService from '../services/UserServices'
 
 export default {
   name: 'home',
@@ -19,13 +19,9 @@ export default {
   },
   methods: {
     async getHome () {
-      const response = await axios.get('http://localhost:3000/api/home')
+      const response = await UserService.getHome()
       this.results = response.data
     }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
