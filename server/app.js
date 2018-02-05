@@ -27,9 +27,6 @@ app.use(cors())
 //Routes
 app.use('/api', apiRoutes)
 
-//304 error
-app.disable('etag');
-
 //Catch 404 Errors and forward to error handler
 app.use((req, res, next) => {
     const err = new Error('Not Found')

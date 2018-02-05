@@ -1,34 +1,47 @@
 <template>
   <div class="hello">
     <h2>{{ msg }}</h2>
+    <form><input
+    type="name"
+    name="name"
+    v-model="email"
+    placeholder="name"/>
+    <br>
+    <input
+    type="password"
+    name="password"
+    v-model="password"
+    placeholder="password"/>
+    </form>
+    <button
+    @click="register">
+    SignUp</button>
   </div>
 </template>
 
 <script>
+import UserServices from '@/services/Userservices'
+
 export default {
   name: 'signup',
   data () {
     return {
-      msg: 'signup'
+      msg: 'signup',
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    async register () {
+      await UserServices.signup({
+        email: this.email,
+        password: this.password
+      })
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>

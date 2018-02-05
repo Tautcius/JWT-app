@@ -16,7 +16,9 @@
           justify-center
           align-center
         >
-         <router-view></router-view>
+          <v-fade-transition mode="out-in">
+            <router-view></router-view>
+          </v-fade-transition>
         </v-layout>
       </v-container>
     </v-content>
