@@ -12,8 +12,7 @@ signToken = user => {
 exports.unprotected = {
     signUp: () => {},
     login: () => {},
-    verifyToken: () => {},
-    index: () => {} 
+    verifyToken: () => {} 
 }
 
 exports.protected = {
@@ -99,9 +98,6 @@ exports.protected = {
                             })
                 }
             })
-    },
-    exports.unprotected.index = (req, res, next) => {
-        res.status(200).json({ message: "welcome to home page."})
     },
     exports.protected.users = (req, res, next) => {
         User.find({}, (err, users) => {

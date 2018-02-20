@@ -13,18 +13,15 @@ router.route('/')
 router.route('/signup')
 .post(usersControler.unprotected.signUp)
 
-router.route('/home')
-.get(usersControler.unprotected.index)
-
 router.route('/login')
 .post(usersControler.unprotected.login)
 //protected routes
-
+//router.route('/home')
+//.get(usersControler.protected.index)
 
 router.use(usersControler.unprotected.verifyToken)
 router.route('/users')
 .get(usersControler.protected.users)
-
 router.route('/me')
 .get(usersControler.protected.me)
 .put(usersControler.protected.update)
