@@ -16,13 +16,12 @@ const app = express()
 //secret variable
 app.set('secret', config.secret)
 
-
-const apiRoutes = require('./routes/users')
-
 // Midddleware
+app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(cors())
+
+const apiRoutes = require('./routes/users')
 
 //Routes
 app.use('/api', apiRoutes)
