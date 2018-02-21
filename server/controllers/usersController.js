@@ -25,9 +25,7 @@ exports.protected = {
 
     exports.unprotected.signUp = async(req, res, next) => {
         try {
-            const {
-                name
-                } = req.body
+            const { name } = req.body
             const foundUser = await User.findOne({
                 name
             })
@@ -56,49 +54,33 @@ exports.protected = {
         }
 
     },
-    exports.unprotected.login = (req, res, next) => {
+    exports.unprotected.login = async (req, res, next) => {
+        try {
             console.log(req.body)
-            User.findOne({
-                name: req.body.name
-            }, (err, user) => {
-                console.log(user)
-                let isValid = bcrypt.compare(req.body.password, user.rspassword, function(err, res) {
-                    if (err) {
-                        throw err
-                    }
-                })
-                console.log(isValid)
-                if (err) return res.status(500).send('Error on the server.')
-                if (!user) 
-                {
-                    res.status(404).json({
-                        success: false,
-                        message: 'Authentication failed. User not found.'
-                    })
-                }
-                else if (isValid) 
-                {
-                    res.status(401).json({
-                        success: false,
-                        message: 'Authentication failed. Wrong password.'
-                    })
-                }
-                else 
-                {
-                   let newUser = user
-                    delete newUser.password
-                    console.log(newUser) 
-                    let token = jwt.sign({user: newUser}, config.secret, {
-                        expiresIn: 60 * 60 * 24
-                    })
-                    res.json({
-                        success: true,
-                        message: 'you have a token',
-                        token: token
+            const { name } = req.body
+
+            await User.findOne({name}, (err, user) => {
+                if (!user) return res.status(404).send('No user found.')
+                    bcrypt.compare(req.body.password, user.password, (err, match) => {
+                        if (match) {
+                            const token = signToken(user)
+                            res.status(200).json({
+                                success: true,
+                                message: 'You have loged in',
+                                token: token
                             })
-                }
+                        } else {
+                            res.status(401).json({
+                                success: false,
+                                message: 'Authentication failed. Wrong password.'
+                            })
+                        }
+                })
             })
-    },
+        } catch (err) {
+            next(err)
+                }
+        },
     exports.protected.users = (req, res, next) => {
         User.find({}, (err, users) => {
             if (err) return res.status(500).send("there was a problem finding user.")
